@@ -1,10 +1,15 @@
 const express = require('express');
 
 const app = express();
+
 app.use(express.json());
+
+//serve static file
+// app.use(express.static(`${dirname}/public`))
 
 //Global Middleware.
 app.use((req, res, next) => {
+  //Prints date and time.
   req.requestTime = new Date().toISOString();
   console.log('Hello from the middleware!!!');
   next();
