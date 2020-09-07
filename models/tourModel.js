@@ -17,7 +17,7 @@ const newSchema = new mongoose.Schema({
     required: [true, 'Must have group size'],
   },
   difficulty: {
-    type: Number,
+    type: String,
     required: [true, 'Must have difficulty'],
   },
   ratingsAverage: {
@@ -49,6 +49,7 @@ const newSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now(),
+    select: false,
   },
   startDates: [Date],
 });
