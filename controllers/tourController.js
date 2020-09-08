@@ -87,18 +87,6 @@ exports.getTour = async (req, res) => {
   try {
     const tour = await Tour.findById(req.params.id);
 
-    // console.log(req.params);
-    // const id = req.params.id * 1; //converts req.params.id to number
-
-    // const tour = tours.find((el) => el.id === id);
-    // //Checking if tour is undefined.
-    // if (!tour) {
-    //   return res.status(404).json({
-    //     status: 'fail',
-    //     message: 'Invlaid ID',
-    //   });
-    // }
-
     res.status(200).json({
       status: 'success',
       data: {
