@@ -6,6 +6,8 @@ router
   .route('/top-5-cheap')
   .get(tourController.aliasTopTours, tourController.getAllTours);
 
+router.route('/tour-stats').get(tourController.getTourStats);
+
 router.param('id', (req, res, next, val) => {
   console.log(`Id is ${val}`);
   next();
