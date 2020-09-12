@@ -106,13 +106,13 @@ newSchema.pre('save', function (next) {
 //   next();
 // });
 
-//Query Middleware
-// newSchema.pre(/^find/, function (next) {
-//   this.find({ secretTour: { $ne: true } });
+// Query Middleware
+newSchema.pre(/^find/, function (next) {
+  this.find({ secretTour: { $ne: true } });
 
-//   this.start = date.now();
-//   next();
-// });
+  this.start = date.now();
+  next();
+});
 
 // newSchema.post(/^find/, function (docs, next) {
 //   console.log(`Query too ${Date.now() - this.start} milliseconds`);
