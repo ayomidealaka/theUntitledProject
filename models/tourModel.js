@@ -106,20 +106,18 @@ newSchema.pre('save', function (next) {
 //   next();
 // });
 
-//Query Middleware
-// newSchema.pre(/^find/, function (next) {
-//   this.find({ secretTour: { $ne: true } });
+// // Query Middleware
+newSchema.pre(/^find/, function (next) {
+  this.find({ secretTour: { $ne: true } });
 
-//   this.start = date.now();
-//   next();
-// });
+  this.start = Date.now();
+  next();
+});
 
-// newSchema.post(/^find/, function (docs, next) {
-//   console.log(`Query too ${Date.now() - this.start} milliseconds`);
-//   console.log(docs);
-
-//   next();
-// });
+newSchema.post(/^find/, function (docs, next) {
+  console.log(`Query took ${Date.now() - this.start} milliseconds.`);
+  next();
+});
 
 //Aggregation Middelware
 newSchema.pre('aggregate', function (next) {

@@ -10,19 +10,19 @@ exports.aliasTopTours = (req, res, next) => {
 };
 
 //Checks for name or price when created.
-exports.checkBody = (req, res, next) => {
-  if (!req.body.name || !req.body.price) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'Missing name or price',
-    });
-  }
-  next();
-};
+// exports.checkBody = (req, res, next) => {
+//   if (!req.body.name || !req.body.price) {
+//     return res.status(400).json({
+//       status: 'fail',
+//       message: 'Missing name or price',
+//     });
+//   }
+//   next();
+// };
 
 exports.getAllTours = async (req, res) => {
   try {
-    console.log(req.query);
+    //     console.log(req.query);
 
     //Execute query
     const features = new APIFeatures(Tour.find(), req.query)
