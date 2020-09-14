@@ -127,7 +127,7 @@ newSchema.post(/^find/, function (docs, next) {
   next();
 });
 
-//Aggregation Middelware
+//Aggregation Middleware
 newSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
 
