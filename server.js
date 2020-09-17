@@ -6,10 +6,7 @@ process.on('uncaughtException', (err) => {
   console.log('UNCAUGHT EXCEPTION!!!');
   console.log('Server shutting down...');
   console.log(err.name, err.message);
-
-  server.close(() => {
-    process.exit(1);
-  });
+  process.exit(1);
 });
 
 dotenv.config({ path: './config.env' });
@@ -44,5 +41,3 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
   });
 });
-
-console.log(x);
