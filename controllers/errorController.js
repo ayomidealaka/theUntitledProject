@@ -5,23 +5,39 @@ const handleCastErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
+const handleDuplicateFieldsDB = (err) => {
+  const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+  console.log(value);
+  const message = `Duplicate field value: ${value}. Please use another value!`;
+  return new AppError(message, 400);
+};
+
+const sendErrorDev = (err, res) => {
+  res.status(err.statusCode).json({
+    status: err.status,
+    error: err,
+    message: err.message,
+    stack: err.stack,
+  });
+};
+
 const sendErrorProd = (err, res) => {
-  //operational error. Trusted error.
+  // Operational, trusted error: send message to client
   if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.status,
-      //error: err, //not meant to be in prod.
       message: err.message,
-      //stack: err.stack, //not in be prod.
     });
-    console.log(err.message);
-    //Programming error from dev team.
-  } else {
-    console.log('Error 😭!!!', err);
 
+    // Programming or other unknown error: don't leak error details
+  } else {
+    // 1) Log error
+    console.error('ERROR 💥', err);
+
+    // 2) Send generic message
     res.status(500).json({
       status: 'error',
-      message: 'something went wrong',
+      message: 'Something went very wrong!',
     });
   }
 };
@@ -34,13 +50,19 @@ module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 
-  let error = Object.create(err);
-  let errName = err.name;
+  if (process.env.NODE_ENV === 'development') {
+    sendErrorDev(err, res);
+  } else if (process.env.NODE_ENV === 'production') {
+    let error = Object.create(err);
+    let errName = err.name;
 
-  if (errName === 'CastError') {
-    error = handleCastErrorDB(error);
+    if (errName === 'CastError') {
+      error = handleCastErrorDB(error);
+    }
+    if (error.code === 11000) {
+      error = handleDuplicateFieldsDB(error);
+    }
+
+    sendErrorProd(error, res);
   }
-
-  // if (error.code)
-  sendErrorProd(error, res);
 };
